@@ -7,7 +7,7 @@ import (
 
 var (
 	requestsProcessed = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "blackbird_processed_requests_total",
+		Name: "stonechat_processed_requests_total",
 		Help: "The total number of processed requests",
 	})
 )

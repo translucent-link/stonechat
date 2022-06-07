@@ -1,7 +1,7 @@
 FROM alpine:3
 WORKDIR /
-COPY blackbird.linux blackbird
+COPY stonechat.linux stonechat
 
-CMD ["/blackbird"]
+CMD ["/stonechat"]
 
 EXPOSE 8080

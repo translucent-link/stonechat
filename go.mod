@@ -1,4 +1,4 @@
-module github.com/translucent-link/blackbird
+module github.com/translucent-link/stonechat
 
 go 1.18
 
