@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -32,7 +33,7 @@ func setupRouter(productionMode, jsonLoggingEnabled bool) *gin.Engine {
 }
 
 func main() {
-
+	godotenv.Load()
 	productionMode := strings.ToLower(os.Getenv("BLACKBIRD_ENV")) == "production"
 
 	jsonLogging := os.Getenv("BLACKBIRD_JSON_LOGGING")

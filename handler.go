@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +26,11 @@ type SheetResponse struct {
 	Values [][]string
 }
 
+func apiKeyURL(url string) string {
+	apiKey := os.Getenv("SHEETS_API_KEY")
+	return fmt.Sprintf("%s&key=%s", url, apiKey)
+}
+
 // /cell request handler of this external adapter. Customise to your heart's content.
 func cellHandler(c *gin.Context) {
 	defer requestsProcessed.Inc() // increases the metrics counter at the end of the request
@@ -35,7 +42,7 @@ func cellHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ExternalAdapterOutput{Error: errors.Wrap(err, "Unable to parse rqeust").Error()})
 	} else {
 		// Fetch the data from the source URL
-		res, err := http.Get(cellQuery.Url)
+		res, err := http.Get(apiKeyURL(cellQuery.Url))
 		if err != nil {
 			c.JSON(http.StatusBadGateway, ExternalAdapterOutput{Error: errors.Wrap(err, "Unable to fetch data from source").Error()})
 		} else {

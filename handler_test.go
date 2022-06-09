@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,22 +23,23 @@ type test struct {
 }
 
 func TestCellHandler(t *testing.T) {
+	godotenv.Load()
 
 	router := setupRouter(false, false)
 
 	tests := []test{
 		{
 			CellQuery{
-				Url:        "https://sheets.googleapis.com/v4/spreadsheets/12rb-uVQsjMWk1GLv6MWXoHHPTY-erUaKVxY4JrdFdUE/values/Sheet1?alt=json&key=AIzaSyDUx0ASGdWyfIbcjT6REUfnwgTg5LbgMY0",
+				Url:        "https://sheets.googleapis.com/v4/spreadsheets/12rb-uVQsjMWk1GLv6MWXoHHPTY-erUaKVxY4JrdFdUE/values/Sheet1?alt=json",
 				Column:     "b",
 				Row:        2,
 				ReturnType: "number",
 			},
-			24.0,
+			27.0,
 		},
 		{
 			CellQuery{
-				Url:        "https://sheets.googleapis.com/v4/spreadsheets/12rb-uVQsjMWk1GLv6MWXoHHPTY-erUaKVxY4JrdFdUE/values/Sheet1?alt=json&key=AIzaSyDUx0ASGdWyfIbcjT6REUfnwgTg5LbgMY0",
+				Url:        "https://sheets.googleapis.com/v4/spreadsheets/12rb-uVQsjMWk1GLv6MWXoHHPTY-erUaKVxY4JrdFdUE/values/Sheet1?alt=json",
 				Column:     "a",
 				Row:        1,
 				ReturnType: "string",
