@@ -27,7 +27,16 @@ func setupRouter(productionMode, jsonLoggingEnabled bool) *gin.Engine {
 
 	router.GET("/health", healthHandler)
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
-	router.POST("/cell", cellHandler)
+
+	router.GET("/cell/:column/:row/:returnType", getCellHandler)
+	router.GET("/range/:startColumn/:startRow/:endColumn/:endRow/:returnType", getRangeHandler)
+	router.GET("/row/:startColumn/:endColumn/:row/:returnType", getRowHandler)
+	router.GET("/column/:column/:startRow/:endRow/:returnType", getColumnHandler)
+
+	router.POST("/range", postRangeHandler)
+	router.POST("/row", postRowHandler)
+	router.POST("/column", postColumnHandler)
+	router.POST("/cell", postCellHandler)
 
 	return router
 }

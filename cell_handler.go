@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -22,27 +21,42 @@ type ExternalAdapterOutput struct {
 	Error string      `json:"error,omitempty"`
 }
 
+// Represents tabular structure of JSON-version of Google Sheet
 type SheetResponse struct {
 	Values [][]string
 }
 
-func apiKeyURL(url string) string {
+// generates URL to access Google Sheet
+func sheetURL() string {
+	sheetId := os.Getenv("SHEETS_ID")
 	apiKey := os.Getenv("SHEETS_API_KEY")
-	return fmt.Sprintf("%s&key=%s", url, apiKey)
+	tabName := os.Getenv("SHEETS_TAB_NAME")
+	return fmt.Sprintf("https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s?alt=json&key=%s", sheetId, tabName, apiKey)
 }
 
-// /cell request handler of this external adapter. Customise to your heart's content.
-func cellHandler(c *gin.Context) {
+// handles GET version of Cell query
+func getCellHandler(c *gin.Context) {
 	defer requestsProcessed.Inc() // increases the metrics counter at the end of the request
-
 	cellQuery := CellQuery{}
+	err := c.ShouldBindUri(&cellQuery)
+	_cellHandler(c, cellQuery, err)
+}
 
+// handles POST version of Cell query
+func postCellHandler(c *gin.Context) {
+	defer requestsProcessed.Inc() // increases the metrics counter at the end of the request
+	cellQuery := CellQuery{}
 	err := c.ShouldBind(&cellQuery)
+	_cellHandler(c, cellQuery, err)
+}
+
+// main guts of Cell query
+func _cellHandler(c *gin.Context, cellQuery CellQuery, err error) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ExternalAdapterOutput{Error: errors.Wrap(err, "Unable to parse rqeust").Error()})
 	} else {
 		// Fetch the data from the source URL
-		res, err := http.Get(apiKeyURL(cellQuery.Url))
+		res, err := http.Get(sheetURL())
 		if err != nil {
 			c.JSON(http.StatusBadGateway, ExternalAdapterOutput{Error: errors.Wrap(err, "Unable to fetch data from source").Error()})
 		} else {
@@ -57,26 +71,18 @@ func cellHandler(c *gin.Context) {
 				for i, rowOfCells := range source.Values {
 					if uint(i+1) == cellQuery.Row {
 						for j, cell := range rowOfCells {
-							if j == cellQuery.CellIndex() {
+							if j == cellQuery.ColumnIndex() {
 								valueStr = cell
 							}
 						}
 					}
 				}
 
-				var returnable interface{}
-				if cellQuery.ReturnType == "number" {
-					returnable, _ = strconv.Atoi(valueStr)
-				} else {
-					returnable = valueStr
-				}
-
+				value := cellQuery.returnValue(valueStr)
 				returnValue := ExternalAdapterOutput{}
-				// assign the price to the output data struct. Good place to make any modification.
-				returnValue.Data = &DataOutput{Value: returnable}
+				returnValue.Data = &DataOutput{Value: value}
 				c.JSON(http.StatusOK, returnValue)
 			}
 		}
 	}
-
 }
