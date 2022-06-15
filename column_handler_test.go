@@ -11,32 +11,31 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type rangetest struct {
-	input    RangeQuery
+type columntest struct {
+	input    ColumnQuery
 	expected interface{}
 }
 
-var rangetests = []rangetest{
+var columntests = []columntest{
 	{
-		RangeQuery{
-			StartColumn: "e",
-			StartRow:    2,
-			EndColumn:   "g",
-			EndRow:      4,
-			ReturnType:  "n",
+		ColumnQuery{
+			Column:     "g",
+			StartRow:   2,
+			EndRow:     4,
+			ReturnType: "n",
 		},
-		"[[1,2,3],[4,5,6],[7,8]]",
+		"[3,6]",
 	},
 }
 
-func TestGetRangeHandler(t *testing.T) {
+func TestGetColumnHandler(t *testing.T) {
 	godotenv.Load()
 
 	router := setupRouter(false, false)
 
-	for _, test := range rangetests {
+	for _, test := range columntests {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", fmt.Sprintf("/range/%s/%d/%s/%d/%s", test.input.StartColumn, test.input.StartRow, test.input.EndColumn, test.input.EndRow, test.input.ReturnType), nil)
+		req, _ := http.NewRequest("GET", fmt.Sprintf("/column/%s/%d/%d/%s", test.input.Column, test.input.StartRow, test.input.EndRow, test.input.ReturnType), nil)
 		router.ServeHTTP(w, req)
 
 		assert.Equal(t, 200, w.Code)
