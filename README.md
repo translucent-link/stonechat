@@ -65,4 +65,4 @@ The example container is deployed at https://ethusd-example.fly.dev/.
 
 ## Support & Help
 
-Feel free open a [Github Issue](https://github.com/translucent-link/stonechat/issues) or come find us in the [Translucent Discord](https://discord.gg/RgxXeGuz).
+Feel free open a [Github Issue](https://github.com/translucent-link/stonechat/issues) or come find us in the [Translucent Discord](https://discord.gg/JxKT6R9Xpz).
