@@ -3,12 +3,12 @@ Chainlink External Adapter for Google Sheets
 
 ## Introduction
 
-Google Sheets is more than just a simple spreadsheet. Is a proving ground for new business ideas, tokenomics, ideation and prototyping.
+Google Sheets is more than just a simple spreadsheet. Its a proving ground for new business ideas, tokenomics, ideation and prototyping.
 Stonechat is a Chainlink Adapter that helps node operators build a bridge to Google Sheets, so that web3 development teams can integrate data held in Google Sheets into their smart contracts.
 
 Web3 teams can combine Chainlink Oracles and Google Sheets together to rapidly prototype new solutions by generating the right data in Google Sheets and using the adapter to bring the data on-chain.
 
-The adapter supports the fetching of individual cells, rows, columns, and ranges. The adapter also type conversions to convert data into more compatible formats, such as dates to EVM timestamps.
+The adapter supports the fetching of individual cells, rows, columns, and ranges. The adapter also performs type conversions to convert data into more compatible formats, such as from dates to EVM timestamps.
 
 ## Ingredients you will need
 
@@ -29,7 +29,7 @@ You have three options to host and run Stonechat
 
 Lets use the following spreadsheet as an example:
 
-![Sample spreadsheet](./assets/spreadsheet.png)
+![Sample spreadsheet](https://github.com/translucent-link/stonechat/raw/main/assets/spreadsheet.png)
 
 ### Cells
 
@@ -136,6 +136,8 @@ Stonechat has the ability to convert (best effort) any data it retrieves into a 
 * `n` - returns a number converting source data to a `float64`.
 * `t` - converts a date-value to the number of seconds since the epoch, making it compatible with `block.timestamp`
 
+Note: date-parsing is highly dependent on date formats. See the environment section below to configure date formats.
+
 ### POST instead of GET
 
 The adapter supports using POST as the HTTP method, instead of GET:
@@ -145,7 +147,7 @@ The adapter supports using POST as the HTTP method, instead of GET:
     POST /row
     POST /range
 
-In each of `POST /uri` cases above the expected payload is a JSON payload with the values that are normally passed in on the path of `GET /uri` request, e.g. :returnType. 
+In each of `POST /uri` cases above the expected payload is a JSON payload with the values that are normally passed in on the path of a `GET /uri` request, e.g. :returnType. 
 
     POST /range
 
@@ -218,6 +220,21 @@ To deploy an update to your external adapter
     flyctl deploy --image=translucentlink/stonechat:0.0.2
 
 The example container is deployed at https://ethusd-example.fly.dev/.
+
+## Environment
+
+The application uses a couple of environment variables to configure its behaviour
+
+    SHEETS_ID=12rb-uVQsjMWk1GLv6MWXoHHPTY-erUaKVxY4JrdFdHK
+    SHEETS_API_KEY=AB................................e0
+    SHEETS_TAB_NAME=Sheet1
+    SHEETS_DATE_FORMAT=DD/MM/YYYY
+
+* `SHEETS_ID` refers to the id (found in the URL) of the Google Sheet you're trying to access
+* `SHEETS_API_KEY` refers to the API key used to programmatically gain access to the Google Sheet
+* `SHEETS_TAB_NAME` refers to the name of the Google Sheet tab you're trying to access, e.g Sheet1
+* `SHEETS_DATE_FORMAT` used by the timestamp return type to parse and convert a date into a timestamp object.
+
 
 ## Support & Help
 

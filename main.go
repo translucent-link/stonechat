@@ -25,6 +25,9 @@ func setupRouter(productionMode, jsonLoggingEnabled bool) *gin.Engine {
 		router = gin.Default()
 	}
 
+	router.LoadHTMLGlob("templates/*")
+
+	router.GET("/", homeHandler)
 	router.GET("/health", healthHandler)
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 

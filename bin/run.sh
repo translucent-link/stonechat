@@ -1,1 +1,1 @@
- go run cell_handler.go cell_query.go health.go log.go main.go metrics.go common.go range_query.go range_handler.go row_handler.go row_query.go column_query.go column_handler.go
+ go run cell_handler.go cell_query.go health.go log.go main.go metrics.go common.go range_query.go range_handler.go row_handler.go row_query.go column_query.go column_handler.go home_handler.go
