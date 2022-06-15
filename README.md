@@ -136,6 +136,42 @@ Stonechat has the ability to convert (best effort) any data it retrieves into a 
 * `n` - returns a number converting source data to a `float64`.
 * `t` - converts a date-value to the number of seconds since the epoch, making it compatible with `block.timestamp`
 
+### POST instead of GET
+
+The adapter supports using POST as the HTTP method, instead of GET:
+
+    POST /cell
+    POST /column
+    POST /row
+    POST /range
+
+In each of `POST /uri` cases above the expected payload is a JSON payload with the values that are normally passed in on the path of `GET /uri` request, e.g. :returnType. 
+
+    POST /range
+
+    {
+        "startColumn": "b",
+        "endColumn": "d",
+        "startRow": 2,
+        "endRow": 4,
+        "returnType": "n"
+    }
+
+### Chainlink Jobs
+
+The return values and types are intended to be compatible with the basic jobs that most node operators offer to the market, such as
+
+* Get > Uint256
+* Get > Uint256[]
+* Get > Bool
+* Get > Bytes
+* Post > Uint256
+* Post > Uint256[]
+* Post > Bool
+* Post > Bytes
+* etc.
+
+
 # Building Stonechat
 ## Getting started
 
