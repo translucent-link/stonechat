@@ -21,8 +21,8 @@ You will need the following to get up and running with Stonechat
 ## Hosting Stonechat
 
 You have three options to host and run Stonechat
-1. Build it from scratch, including your own Docker container image, and run it in the cloud in AWS, Heroku, Fly.io (recommended)
-2. Use our latest Docker container image from Docker hub and run it in the cloud.
+1. Build it from scratch, including your own Docker container image, and run it in the cloud on AWS, Heroku, Fly.io (recommended)
+2. Use our [latest Docker container](https://hub.docker.com/r/translucentlink/stonechat) image from Docker Hub and run it in the cloud.
 3. Get us to to host the external adapter for you. Come find us in the [Translucent Discord](https://discord.gg/JxKT6R9Xpz).
 
 ## Using the Stonechat
